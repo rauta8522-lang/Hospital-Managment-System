@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hospital Management System</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.container {
+    background: rgba(0,0,0,0.3);
+    padding: 25px;
+    border-radius: 12px;
+    width: 380px;
+}
+
+h2 {
+    text-align: center;
+}
+
+input, button {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: none;
+}
+
+button {
+    background: #ffcc00;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ffdd33;
+}
+
+table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+table, th, td {
+    border: 1px solid #fff;
+}
+
+th, td {
+    padding: 6px;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Hospital Management System</h2>
+
+    <input type="text" id="pid" placeholder="Patient ID">
+    <input type="text" id="name" placeholder="Patient Name">
+    <input type="number" id="age" placeholder="Age">
+    <input type="text" id="disease" placeholder="Disease">
+
+    <button onclick="addPatient()">Add Patient</button>
+    <button onclick="showPatients()">View Patients</button>
+
+    <div id="output"></div>
+</div>
+
+<script>
+let patients = JSON.parse(localStorage.getItem("patients")) || [];
+
+function addPatient() {
+    let pid = document.getElementById("pid").value;
+    let name = document.getElementById("name").value;
+    let age = document.getElementById("age").value;
+    let disease = document.getElementById("disease").value;
+
+    if (pid === "" || name === "" || age === "" || disease === "") {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    patients.push({pid, name, age, disease});
+    localStorage.setItem("patients", JSON.stringify(patients));
+
+    alert("Patient Added Successfully!");
+
+    document.getElementById("pid").value = "";
+    document.getElementById("name").value = "";
+    document.getElementById("age").value = "";
+    document.getElementById("disease").value = "";
+}
+
+function showPatients() {
+    if (patients.length === 0) {
+        document.getElementById("output").innerHTML = "No patient records found.";
+        return;
+    }
+
+    let table = `<table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Disease</th>
+        </tr>`;
+
+    patients.forEach(p => {
+        table += `<tr>
+            <td>${p.pid}</td>
+            <td>${p.name}</td>
+            <td>${p.age}</td>
+            <td>${p.disease}</td>
+        </tr>`;
+    });
+
+    table += `</table>`;
+    document.getElementById("output").innerHTML = table;
+}
+</script>
+
+</body>
+</html>
